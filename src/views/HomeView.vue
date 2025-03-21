@@ -67,10 +67,6 @@ const setFilteredTodos = () => {
     if (filter.value === 'completed') return todo.completed
     if (filter.value === 'incomplete') return !todo.completed
   })
-
-  filteredTodos.value.sort((a, b) => {
-    return b.id - a.id
-  })
 }
 watch([todos, search, filter], setFilteredTodos)
 setFilteredTodos()
@@ -94,6 +90,7 @@ const deleteTodo = (id) => {
   setItem('todos', todos.value)
 }
 
+// 할 일 상세 페이지로 이동
 const goDetail = (id) => {
   router.push(`/detail/${id}`)
 }

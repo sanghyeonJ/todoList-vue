@@ -56,7 +56,7 @@ const addTodo = () => {
     return
   }
   setForm()
-  todos.value.push(newTodo)
+  todos.value = [newTodo, ...todos.value]
   setItem('todos', todos.value)
 
   alert('할 일이 추가되었습니다.')
@@ -79,11 +79,13 @@ div {
   }
   textarea {
     width: 100%;
+    height: 100px;
     padding: 10px;
     border: 1px solid #ccc;
     border-radius: 5px;
     outline: none;
     box-sizing: border-box;
+    resize: none;
   }
   button {
     padding: 10px 20px;

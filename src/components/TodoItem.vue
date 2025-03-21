@@ -1,21 +1,17 @@
 <template>
   <div v-if="todos.length > 0">
-    <div
-      v-for="todo in todos"
-      :key="todo.id"
-      @mousedown="clickStart(todo.id)"
-      @mouseup="clickEnd"
-      @mouseleave="clickEnd"
-      class="todoItem"
-    >
-      <h3 @click="emit('goDetail', todo.id)">{{ todo.title }}</h3>
+    <div v-for="todo in todos" @click="emit('goDetail', todo.id)" :key="todo.id" class="todoItem">
+      <h3>{{ todo.title }}</h3>
       <div>
         <button
           type="button"
-          @click="emit('toggleTodo', todo.id)"
+          @click.stop="emit('toggleTodo', todo.id)"
           :class="{ completed: todo.completed }"
         >
           {{ todo.completed ? '완료' : '미완료' }}
+        </button>
+        <button type="button" class="deleteBtn" @click.stop="emit('deleteTodo', todo.id)">
+          삭제
         </button>
       </div>
     </div>
@@ -26,28 +22,12 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
-
 defineProps({
   todos: {
     type: Array,
   },
 })
 const emit = defineEmits(['toggleTodo', 'deleteTodo', 'goDetail'])
-
-const isClick = ref(false)
-
-const clickStart = (id) => {
-  isClick.value = true
-  setTimeout(() => {
-    if (isClick.value) {
-      emit('deleteTodo', id)
-    }
-  }, 500)
-}
-const clickEnd = () => {
-  isClick.value = false
-}
 </script>
 
 <style lang="scss" scoped>
@@ -72,6 +52,15 @@ const clickEnd = () => {
       background-color: #ccc;
       color: #fff;
     }
+    &.deleteBtn {
+      border: 1px solid #f00;
+      color: #f00;
+      margin-left: 10px;
+    }
+  }
+  &.dragging {
+    transform: scale(1.05);
+    opacity: 0.5;
   }
 }
 .noTodo {
