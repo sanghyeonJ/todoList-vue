@@ -1,6 +1,11 @@
 <template>
-  <div v-if="todos.length > 0">
-    <div v-for="todo in todos" @click="emit('goDetail', todo.id)" :key="todo.id" class="todoItem">
+  <div v-if="props.todos.length > 0" ref="listElement">
+    <div
+      v-for="todo in props.todos"
+      @click="emit('goDetail', todo.id)"
+      :key="todo.id"
+      class="todoItem"
+    >
       <h3>{{ todo.title }}</h3>
       <div>
         <button
@@ -22,12 +27,25 @@
 </template>
 
 <script setup>
-defineProps({
+const props = defineProps({
   todos: {
     type: Array,
   },
 })
 const emit = defineEmits(['toggleTodo', 'deleteTodo', 'goDetail'])
+
+import { useDraggable } from 'vue-draggable-plus'
+import { ref } from 'vue'
+
+const listElement = ref(null)
+
+useDraggable(listElement, props.todos, {
+  itemKey: 'id',
+  animation: 300,
+  onEnded: (e) => {
+    console.log(e)
+  },
+})
 </script>
 
 <style lang="scss" scoped>
